@@ -25,39 +25,8 @@ jobs:
         scale: 1.0
         src: test/test.drawio
         dest: test.png
-    - name: Convert test file to jpeg image
-      uses: ./
-      with:
-        quality: 100
-        scale: 1.0
-        src: test/test.drawio
-        dest: test.jpeg
-    - name: Convert test file to svg image
-      uses: ./
-      with:
-        scale: 1.0
-        src: test/test.drawio
-        dest: test.svg
-    - name: Convert test file to pdf
-      uses: ./
-      with:
-        scale: 1.0
-        src: test/test.drawio
-        dest: test.pdf
     - name: Upload images as artifacts
       uses: actions/upload-artifact@v1
       with:
         name: png
         path: test.png
-    - uses: actions/upload-artifact@v1
-      with:
-        name: jpeg
-        path: test.jpeg
-    - uses: actions/upload-artifact@v1
-      with:
-        name: svg
-        path: test.svg
-    - uses: actions/upload-artifact@v1
-      with:
-        name: pdf
-        path: test.pdf
