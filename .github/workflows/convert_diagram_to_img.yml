@@ -18,12 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    
+    - name: echo
+      run: pwd
+      
     - name: Convert test file to png image
-      uses: ./
+      uses: Burnett01/actions-drawio@1.2
       with:
-        quality: 100
-        scale: 1.0
-        src: test/test.drawio
+        src: test.drawio
         dest: test.png
     - name: Upload images as artifacts
       uses: actions/upload-artifact@v1
