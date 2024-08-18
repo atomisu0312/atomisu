@@ -27,10 +27,10 @@ jobs:
     - name: Convert test file to png image
       uses: Burnett01/actions-drawio@1.2
       with:
-        src: test.drawio
-        dest: test.png
+        src: docs/infra/drawio/atomisu_net_now.drawio
+        dest: docs/infra/drawio/atomisu_net_now.png
     - name: Upload images as artifacts
       uses: actions/upload-artifact@v1
       with:
         name: png
-        path: test.png
+        path: docs/infra/drawio/atomisu_net_now.png
