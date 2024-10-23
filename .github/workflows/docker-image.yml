@@ -35,7 +35,7 @@ jobs:
         AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
         NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
       run: |
-        docker build ./goodstuff --file ./goodstuff/my_good_stuff/Dockerfile --tag my_good_stuff_action:${{ env.time_stamp }} --platform linux/amd64 --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} --build-arg AUTH_SECRET=${{ secrets.AUTH_SECRET }} --build-arg AUTH_TRUST_HOST=TRUE
+        docker build ./goodstuff/my_good_stuff --file ./goodstuff/my_good_stuff/Dockerfile --tag my_good_stuff_action:${{ env.time_stamp }} --platform linux/amd64 --build-arg NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} --build-arg GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} --build-arg GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} --build-arg AUTH_SECRET=${{ secrets.AUTH_SECRET }} --build-arg AUTH_TRUST_HOST=TRUE
         echo "::set-output name=image_tag::my_good_stuff_action:${{ env.time_stamp }}"
     - name: login to docker hub
       env:
