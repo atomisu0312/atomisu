@@ -1,0 +1,83 @@
+# ビルドステージ
+FROM node:20-buster-slim as builder
+
+WORKDIR /build
+
+# 環境変数を設定
+ARG NEXTAUTH_URL
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG AUTH_SECRET
+ARG AUTH_TRUST_HOST
+ARG PG_DB_HOST
+ARG PG_DB_USER
+ARG PG_DB_PASSWORD
+ARG PG_DB_NAME
+ARG FASTAPI_ACCOUNT_SERVICE_HOST
+
+ENV NEXTAUTH_URL=$NEXTAUTH_URL
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV AUTH_SECRET=$AUTH_SECRET
+ENV AUTH_TRUST_HOST=$AUTH_TRUST_HOST
+ENV PG_DB_HOST=$PG_DB_HOST
+ENV PG_DB_USER=$PG_DB_USER
+ENV PG_DB_PASSWORD=$PG_DB_PASSWORD
+ENV PG_DB_NAME=$PG_DB_NAME
+ENV FASTAPI_ACCOUNT_SERVICE_HOST=$FASTAPI_ACCOUNT_SERVICE_HOST
+
+
+COPY . .
+RUN rm -rf node_modules
+RUN npm ci
+
+COPY . .
+RUN rm -rf .next
+RUN npm run build 
+
+# -----------------------------
+FROM node:20-buster-slim
+
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.4 /lambda-adapter /opt/extensions/lambda-adapter
+ENV PORT=3030
+ENV NODE_ENV=production
+ENV READINESS_CHECK_PATH=/healthcheck
+
+WORKDIR /app
+COPY --from=builder /build/node_modules node_modules 
+COPY --from=builder /build/package.json . 
+COPY --from=builder /build/.next .next 
+COPY --from=builder /build/next.config.js ./
+COPY --from=builder /build/run.sh ./run.sh
+RUN ln -s /tmp/cache ./.next/cache
+
+# 環境変数を設定
+ARG NEXTAUTH_URL
+ARG GOOGLE_CLIENT_ID
+ARG GOOGLE_CLIENT_SECRET
+ARG AUTH_SECRET
+ARG AUTH_TRUST_HOST
+ARG PG_DB_HOST
+ARG PG_DB_USER
+ARG PG_DB_PASSWORD
+ARG PG_DB_NAME
+ARG FASTAPI_ACCOUNT_SERVICE_HOST
+
+ENV NEXTAUTH_URL=$NEXTAUTH_URL
+ENV GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+ENV GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+ENV AUTH_SECRET=$AUTH_SECRET
+ENV AUTH_TRUST_HOST=$AUTH_TRUST_HOST
+ENV PG_DB_HOST=$PG_DB_HOST
+ENV PG_DB_USER=$PG_DB_USER
+ENV PG_DB_PASSWORD=$PG_DB_PASSWORD
+ENV PG_DB_NAME=$PG_DB_NAME
+ENV FASTAPI_ACCOUNT_SERVICE_HOST=$FASTAPI_ACCOUNT_SERVICE_HOST
+
+EXPOSE 3030
+RUN chmod +x ./run.sh
+
+CMD ["sh", "-c", "./run.sh"]
+
+# docker build -t my-favorite-docker-image . でイメージをビルド (環境変数入れないとだめでは？)
+# docker run -dit -p 3030:3030 my-favorite-docker-image でコンテナを起動
