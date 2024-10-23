@@ -2,6 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  /** 
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -11,7 +12,7 @@ const nextConfig = {
         pathname: '/images/**',
       },
     ],
-  },
+  },*/
   serverRuntimeConfig: {
     myPort: process.env.PORT || 3000, // 環境変数PORTが設定されていない場合は3000を使用
   },
@@ -24,17 +25,6 @@ const nextConfig = {
     FASTAPI_ACCOUNT_SERVICE_HOST: process.env.FASTAPI_ACCOUNT_SERVICE_HOST,
   },
   output: 'standalone',
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-        dns: false,
-        net: false,
-        tls: false,
-      };
-    }
-    return config;
-  },
 }
 
 module.exports = nextConfig
