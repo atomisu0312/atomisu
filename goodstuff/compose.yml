@@ -1,0 +1,28 @@
+services:
+  front:
+    build:
+      context: ./my_good_stuff
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
+        AUTH_SECRET: ${AUTH_SECRET}
+        AUTH_TRUST_HOST: TRUE
+    container_name: 'test-front-sandbox'
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_TRUST_HOST: TRUE
+    ports:
+      - '3030:3030'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
