@@ -80,4 +80,4 @@ jobs:
         LAMBDA_FUNCTION_NAME: ${{ secrets.LAMBDA_FUNCTION_NAME }}
         AWS_PAGER: ""
         image_tag: ${{ needs.build.outputs.image_tag }}
-      run: aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/${{ needs.build.outputs.image_tag }} --region ap-northeast-1
+      run: aws lambda update-function-code --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-1.amazonaws.com/${{ needs.build.outputs.image_tag }} --region ap-northeast-1
