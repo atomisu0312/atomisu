@@ -25,3 +25,14 @@ module "lambda_my_good_stuff" {
   ecr_repository_name  = "my_good_stuff_action"
   application_port     = "3030"
 }
+
+module "network" {
+  source = "../../../modules/network"
+
+  vpc-cidr        = "10.1.0.0/16"
+  vpc-name        = "atomisu-terraform-vpc"
+  env-name        = "dev"
+  private-subnets = ["private-1a", "private-1c", "private-1d"]
+  public-subnets  = ["public-1a", "public-1c", "public-1d"]
+  az-list         = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
+}
