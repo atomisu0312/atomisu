@@ -53,11 +53,11 @@ resource "aws_route" "route-igw" {
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
 }
-
+/**
 resource "aws_eip" "nat-gateway-ip-address" {
   domain = "vpc"
 }
-
+**/
 resource "aws_route_table" "rtb-private" {
   vpc_id = aws_vpc.main.id
   tags = {
@@ -156,3 +156,28 @@ resource "aws_vpc_endpoint" "ecr_api" {
 }
 
 **/
+
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = aws_vpc.main.id
+  service_name      = "com.amazonaws.ap-northeast-1.s3"
+  route_table_ids   = [aws_route_table.rtb-private.id]
+  vpc_endpoint_type = "Gateway"
+
+  policy = <<POLICY
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Action": "*",
+      "Effect": "Allow",
+      "Resource": "*",
+      "Principal": "*"
+    }
+  ]
+}
+POLICY
+
+  tags = {
+    Name = "app-vpce-s3"
+  }
+}
