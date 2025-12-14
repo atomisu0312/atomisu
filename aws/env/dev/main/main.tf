@@ -36,3 +36,7 @@ module "network" {
   public-subnets  = ["public-1a", "public-1c", "public-1d"]
   az-list         = ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"]
 }
+
+module "github_provider" {
+  source = "../../../modules/github_provider"
+}
